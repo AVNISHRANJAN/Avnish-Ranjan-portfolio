@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   quality-assurance:
-    name: 🛡️ Quality Assurance
+    name:  Quality Assurance
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -38,11 +38,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-output
-          path: ./dist
+          path: ./out
           retention-days: 1
 
   docker-validation:
-    name: 🐳 Docker Build Validation
+    name:  Docker Build Validation
     needs: quality-assurance
     runs-on: ubuntu-latest
     steps:
@@ -62,8 +62,8 @@ jobs:
           cache-to: type=gha,mode=max
 
   deploy:
-    name: 🚀 Deploy to GitHub Pages
-    needs: docker-validation
+    name:  Deploy to GitHub Pages
+    needs: quality-assurance
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -73,7 +73,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-output
-          path: ./dist
+          path: ./out
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
@@ -81,7 +81,7 @@ jobs:
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./out
 
       - name: Deploy to GitHub Pages
         id: deployment
